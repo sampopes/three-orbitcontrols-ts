@@ -45,7 +45,7 @@ export class OrbitControls extends THREE.EventDispatcher {
   enableRotate: boolean;
   rotateSpeed: number;
   enablePan: boolean;
-  keyPanSpeed: number;
+  panSpeed: number;
   autoRotate: boolean;
   autoRotateSpeed: number;
   minZoom: number;
@@ -149,7 +149,7 @@ export class OrbitControls extends THREE.EventDispatcher {
 
     // Set to false to disable panning
     this.enablePan = true;
-    this.keyPanSpeed = 7.0;	// pixels moved per arrow key push
+    this.panSpeed = 7.0;	// pixels moved per arrow key push
 
     // Set to true to automatically rotate around the target
     // If auto-rotate is enabled, you must call controls.update() in your animation loop
@@ -270,7 +270,7 @@ export class OrbitControls extends THREE.EventDispatcher {
 
         this.panEnd.set( event.clientX, event.clientY );
         this.panDelta.subVectors( this.panEnd, this.panStart );
-        this.pan( this.panDelta.x, this.panDelta.y );
+        this.pan( this.panDelta.x * this.panSpeed  , this.panDelta.y * this.panSpeed );
         this.panStart.copy( this.panEnd );
         this.update();
       }
@@ -310,19 +310,19 @@ export class OrbitControls extends THREE.EventDispatcher {
 
       switch ( event.keyCode ) {
         case this.keys.UP: {
-          this.pan( 0, this.keyPanSpeed );
+          this.pan( 0, this.panSpeed );
           this.update();
         } break;
         case this.keys.BOTTOM: {
-          this.pan( 0, - this.keyPanSpeed );
+          this.pan( 0, - this.panSpeed );
           this.update();
         } break;
         case this.keys.LEFT: {
-          this.pan( this.keyPanSpeed, 0 );
+          this.pan( this.panSpeed, 0 );
           this.update();
         } break;
         case this.keys.RIGHT: {
-          this.pan( - this.keyPanSpeed, 0 );
+          this.pan( - this.panSpeed, 0 );
           this.update();
         } break;
       }

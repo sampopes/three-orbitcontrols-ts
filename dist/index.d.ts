@@ -26,7 +26,7 @@ export declare class OrbitControls extends THREE.EventDispatcher {
     enableRotate: boolean;
     rotateSpeed: number;
     enablePan: boolean;
-    keyPanSpeed: number;
+    panSpeed: number;
     autoRotate: boolean;
     autoRotateSpeed: number;
     minZoom: number;

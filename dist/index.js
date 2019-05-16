@@ -38,7 +38,7 @@ var EPS = 0.000001;
 *    Zoom - middle mouse, or mousewheel / touch: two finger spread or squish
 *    Pan - right mouse, or arrow keys / touch: three finger swipe
 */
-var OrbitControls = (function (_super) {
+var OrbitControls = /** @class */ (function (_super) {
     __extends(OrbitControls, _super);
     function OrbitControls(object, domElement, domWindow) {
         var _this = _super.call(this) || this;
@@ -76,7 +76,7 @@ var OrbitControls = (function (_super) {
         _this.rotateSpeed = 1.0;
         // Set to false to disable panning
         _this.enablePan = true;
-        _this.keyPanSpeed = 7.0; // pixels moved per arrow key push
+        _this.panSpeed = 7.0; // pixels moved per arrow key push
         // Set to true to automatically rotate around the target
         // If auto-rotate is enabled, you must call controls.update() in your animation loop
         _this.autoRotate = false;
@@ -182,7 +182,7 @@ var OrbitControls = (function (_super) {
                     return;
                 _this.panEnd.set(event.clientX, event.clientY);
                 _this.panDelta.subVectors(_this.panEnd, _this.panStart);
-                _this.pan(_this.panDelta.x, _this.panDelta.y);
+                _this.pan(_this.panDelta.x * _this.panSpeed, _this.panDelta.y * _this.panSpeed);
                 _this.panStart.copy(_this.panEnd);
                 _this.update();
             }
@@ -216,25 +216,25 @@ var OrbitControls = (function (_super) {
             switch (event.keyCode) {
                 case _this.keys.UP:
                     {
-                        _this.pan(0, _this.keyPanSpeed);
+                        _this.pan(0, _this.panSpeed);
                         _this.update();
                     }
                     break;
                 case _this.keys.BOTTOM:
                     {
-                        _this.pan(0, -_this.keyPanSpeed);
+                        _this.pan(0, -_this.panSpeed);
                         _this.update();
                     }
                     break;
                 case _this.keys.LEFT:
                     {
-                        _this.pan(_this.keyPanSpeed, 0);
+                        _this.pan(_this.panSpeed, 0);
                         _this.update();
                     }
                     break;
                 case _this.keys.RIGHT:
                     {
-                        _this.pan(-_this.keyPanSpeed, 0);
+                        _this.pan(-_this.panSpeed, 0);
                         _this.update();
                     }
                     break;
