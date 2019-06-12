@@ -25,19 +25,19 @@ var START_EVENT = { type: 'start' };
 var END_EVENT = { type: 'end' };
 var EPS = 0.000001;
 /**
-* @author qiao / https://github.com/qiao
-* @author mrdoob / http://mrdoob.com
-* @author alteredq / http://alteredqualia.com/
-* @author WestLangley / http://github.com/WestLangley
-* @author erich666 / http://erichaines.com
-* @author nicolaspanel / http://github.com/nicolaspanel
-*
-* This set of controls performs orbiting, dollying (zooming), and panning.
-* Unlike TrackballControls, it maintains the "up" direction object.up (+Y by default).
-*    Orbit - left mouse / touch: one finger move
-*    Zoom - middle mouse, or mousewheel / touch: two finger spread or squish
-*    Pan - right mouse, or arrow keys / touch: three finger swipe
-*/
+ * @author qiao / https://github.com/qiao
+ * @author mrdoob / http://mrdoob.com
+ * @author alteredq / http://alteredqualia.com/
+ * @author WestLangley / http://github.com/WestLangley
+ * @author erich666 / http://erichaines.com
+ * @author nicolaspanel / http://github.com/nicolaspanel
+ *
+ * This set of controls performs orbiting, dollying (zooming), and panning.
+ * Unlike TrackballControls, it maintains the "up" direction object.up (+Y by default).
+ *    Orbit - left mouse / touch: one finger move
+ *    Zoom - middle mouse, or mousewheel / touch: two finger spread or squish
+ *    Pan - right mouse, or arrow keys / touch: three finger swipe
+ */
 var OrbitControls = /** @class */ (function (_super) {
     __extends(OrbitControls, _super);
     function OrbitControls(object, domElement, domWindow) {
@@ -200,12 +200,37 @@ var OrbitControls = /** @class */ (function (_super) {
                 return;
             event.preventDefault();
             event.stopPropagation();
-            if (event.deltaY < 0) {
-                _this.dollyOut(_this.getZoomScale());
+            var element = _this.domElement === document ? _this.domElement.body : _this.domElement;
+            var raycaster = new THREE.Raycaster();
+            var mouse = new THREE.Vector2(0, 0);
+            // event.offsetX / this.container.offsetWidths
+            mouse.x = (event.offsetX / element.offsetWidth) * 2 - 1;
+            mouse.y = -(event.offsetY / element.offsetHeight) * 2 + 1;
+            raycaster.setFromCamera(mouse, _this.object);
+            // raycaster.setFromCamera;
+            var vec3dir = raycaster.ray.direction.normalize();
+            var delta = 0;
+            if (event.deltaY !== undefined) { // WebKit / Opera / Explorer 9
+                delta = event.wheelDelta * _this.getZoomScale();
             }
-            else if (event.deltaY > 0) {
-                _this.dollyIn(_this.getZoomScale());
+            else if (event.detail !== undefined) { // Firefox
+                delta = -event.detail * _this.getZoomScale();
             }
+            vec3dir.multiplyScalar(delta);
+            console.log(' this.target.length():' + _this.target.length());
+            var pos0 = _this.target.clone();
+            pos0.add(vec3dir).sub(_this.position0);
+            if (pos0.length() < _this.maxDistance) {
+                _this.target.add(vec3dir);
+                _this.object.position.add(vec3dir);
+            }
+            /* else {
+                if (delta < 0) {
+                    this.dollyOut(this.getZoomScale());
+                } else if (delta > 0) {
+                    this.dollyIn(this.getZoomScale());
+                }
+            }*/
             _this.update();
             _this.dispatchEvent(START_EVENT); // not sure why these are here...
             _this.dispatchEvent(END_EVENT);
