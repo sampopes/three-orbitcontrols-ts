@@ -217,7 +217,7 @@ var OrbitControls = /** @class */ (function (_super) {
                 delta = -event.detail * _this.getZoomScale();
             }
             vec3dir.multiplyScalar(delta);
-            console.log(' this.target.length():' + _this.target.length());
+            // console.log(' this.target.length():'+ this.target.length());
             var pos0 = _this.target.clone();
             pos0.add(vec3dir).sub(_this.position0);
             if (pos0.length() < _this.maxDistance) {
