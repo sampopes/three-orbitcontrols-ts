@@ -309,7 +309,7 @@ export class OrbitControls extends THREE.EventDispatcher {
                 delta = -event.detail * this.getZoomScale();
             }
             vec3dir.multiplyScalar(delta);
-            console.log(' this.target.length():'+ this.target.length());
+            // console.log(' this.target.length():'+ this.target.length());
             const pos0  = this.target.clone();
              pos0.add(vec3dir).sub(this.position0);
 
