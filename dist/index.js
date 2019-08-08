@@ -211,7 +211,8 @@ var OrbitControls = /** @class */ (function (_super) {
             var vec3dir = raycaster.ray.direction.normalize();
             var delta = 0;
             if (event.deltaY !== undefined) { // WebKit / Opera / Explorer 9
-                delta = event.wheelDelta * _this.getZoomScale();
+                var preDelta = event.wheelDelta > 20 ? 15 : event.wheelDelta;
+                delta = preDelta * _this.getZoomScale();
             }
             else if (event.detail !== undefined) { // Firefox
                 delta = -event.detail * _this.getZoomScale();

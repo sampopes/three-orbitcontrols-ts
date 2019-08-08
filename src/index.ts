@@ -303,7 +303,8 @@ export class OrbitControls extends THREE.EventDispatcher {
             var vec3dir = raycaster.ray.direction.normalize();
             var delta = 0;
             if (event.deltaY !== undefined) { // WebKit / Opera / Explorer 9
-                delta = event.wheelDelta * this.getZoomScale();
+                 var preDelta = event.wheelDelta > 20 ? 15 : event.wheelDelta;
+                delta = preDelta * this.getZoomScale();
             }
             else if (event.detail !== undefined) { // Firefox
                 delta = -event.detail * this.getZoomScale();
